@@ -1,0 +1,78 @@
+{% extends "layout-main/main.twig" %}
+
+{% block title %}Список пользователей в хранилище{% endblock %}
+
+{% block content %}
+    {% include 'layout-user/user-function.twig' %}
+    <ul class="list {% if hasAdmin %}list_admin{% else %}list_user{% endif %}" id="navigation">
+        <li class="list__left">Логин</li>
+        <li class="list__left">Имя</li>
+        <li class="list__left">Фамилия</li>
+        <li>День рождения</li>
+
+        {% if hasAdmin %}
+            <li>Редактировать</li>
+            <li>Удалить</li>
+            <li class="list__separator list__separator_admin"></li>
+        {% else %}
+            <li class="list__separator list__separator_user"></li>
+        {% endif %}
+
+        {% if users|length > 0 %}
+            {% for user in users %}
+            <li id="{{ user.getUserId }}" class="list__left list__flex">
+                <p>{{ user.getLogin() }}</p>
+            </li>
+            <li id="{{ user.getUserId }}" class="list__left list__flex">
+                <p>{{ user.getUserName() }}</p>
+            </li>
+            <li id="{{ user.getUserId }}" class="list__left list__flex">
+                <p>{{ user.getUserLastname() }}</p>
+            </li>
+            <li id="{{ user.getUserId }}" class="list__flex">
+                <p>
+                    {% if user.getUserBirthday() is empty %}
+                        <b>не установлен</b>
+                    {% else %}
+                        {{ user.getUserBirthday() | date('d.m.Y') }}
+                    {% endif %}
+                </p>
+            </li>
+        {% if hasAdmin %}
+            <li id="{{ user.getUserId }}">
+                <button onclick="showEdit({{ user.getUserId }})" class="list__btn" type="submit">&#9998;</button>
+                {% include 'layout-user/user-update.twig' %}
+            </li>
+            <li id="{{ user.getUserId }}">
+                <form onsubmit="userDelete({{ user.getUserId }}, event)" method="get">
+                    <button class="list__btn" type="submit">х</button>
+                </form>
+            </li>
+        {% endif %}
+            {% endfor %}
+        {% else %}
+            <script type="text/javascript">
+                window.onload = function () {
+                    showAlert();
+                };
+            </script>
+        {% endif %}
+    </ul>
+    <div class="list__footer">
+        <ul class="list__switch-pages">
+            {% for page in pages %}
+                {% if page == current_page %}
+                    <li><a class="list__page list__page_active" href="/user/index/?page={{ page }}">{{ page }}</a>
+                    </li>
+                {% else %}
+                    <li><a class="list__page" href="/user/index/?page={{ page }}">{{ page }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <form action="/user/clear/" method="get">
+            <button type="submit">Очистить базу</button>
+        </form>
+    </div>
+{% endblock %}
+
+

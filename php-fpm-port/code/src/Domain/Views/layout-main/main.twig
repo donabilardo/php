@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style/style.css?v={{ random() }}">
+</head>
+<body>
+<input id="burger" type="checkbox">
+<label class="burger" for="burger">
+    <svg width="32" height="23" viewBox="0 0 32 23">
+        <path d="M0 23V20.31H32V23H0ZM0 12.76V10.07H32V12.76H0ZM0 2.69V0H32V2.69H0Z"/>
+    </svg>
+</label>
+{% include 'layout-main/site-navbar.twig' %}
+<div class="container">
+    {% include 'layout-main/site-header.twig' %}
+    <section class="content">
+        {% block content %}
+        {% endblock %}</section>
+    {% include 'layout-main/site-footer.twig' %}
+</div>
+{% include 'layout-main/site-alert.twig' %}
+<script src="/script/script.js?v={{ random() }}"></script>
+<script>
+    setInterval(() => {
+        (
+            async () => {
+                const response = await fetch('/page/time');
+                document.querySelector('#time').textContent = await response.json();
+            }
+        )();
+    }, 1000)
+</script>
+</body>
+</html>

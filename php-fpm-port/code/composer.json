@@ -1,0 +1,13 @@
+{
+    "name": "myproject/application",
+    "autoload": {
+        "psr-4": {
+            "Myproject\\Application\\": "src/"
+        }
+    },
+    "require": {
+        "twig/twig": "^3.0",
+      "ext-pdo": "*",
+        "monolog/monolog": "^3.5"
+    }
+}
